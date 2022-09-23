@@ -123,6 +123,23 @@ def getOnPremOnRecords(xpath):
         if(string[element] == '('):
             enter = True
 
+def printOnPremAccountDetails(contador,recordTracker):
+    print('        Record Number: ' + str(recordTracker))
+    print('Account Name: ' + onPremAccountName(contador))
+    print('Product Instances: ' + onPremAccountProductInstance(contador))
+    print('Last Sync Up from On-Prem: ' + onPremAccountLastSyncUp(contador))
+    print('Last Sync Down to On-Prem: ' + onPremAccountLastSyncDown(contador))
+    print('Synchronization Due: ' + onPremAccountSyncDue(contador))
+    print('Version: ' + onPremAccountVersion(contador))
+
+def writeOnPremAccountDetails(contador,recordTracker):
+    log.write('\n        Record Number: ' + str(recordTracker))
+    log.write('\nAccount Name: ' + onPremAccountName(contador))
+    log.write('\nProduct Instances: ' + onPremAccountProductInstance(contador))
+    log.write('\nLast Sync Up from On-Prem: ' + onPremAccountLastSyncUp(contador))
+    log.write('\nLast Sync Down to On-Prem: ' + onPremAccountLastSyncDown(contador))
+    log.write('\nSynchronization Due: ' + onPremAccountSyncDue(contador))
+    log.write('\nVersion: ' + onPremAccountVersion(contador))
 
 
 
@@ -282,55 +299,32 @@ while True:
 
     while contador <= 10:
 
-        accountName = onPremAccountName(contador)
-        productInstance = onPremAccountProductInstance(contador)
-        lastSyncUp = onPremAccountLastSyncUp(contador)
-        lastSyncDown = onPremAccountLastSyncDown(contador)
-        syncDue = onPremAccountSyncDue(contador)
-        version = onPremAccountVersion(contador)
-
         if(option == 1):
-            onPremYear = syncDue
+            onPremYear = onPremAccountSyncDue(contador)
+        elif(option == 2):
+            onPremYear = onPremAccountLastSyncUp(contador)
         else:
-            if(option == 3):
-                onPremYear = lastSyncUp
-            else:
-                onPremYear = lastSyncDown
+            onPremYear = onPremAccountLastSyncDown(contador)
         
 
         print('-----------------------------------')
-        print('        Record Number: ' + str(recordTracker))
-        print('Account Name: ' + accountName)
-        print('Product Instances: ' + productInstance)
-        print('Last Sync Up from On-Prem: ' + lastSyncUp)
-        print('Last Sync Down to On-Prem: ' + lastSyncDown)
-        print('Synchronization Due: ' + syncDue)
-        print('Version: ' + version)
+        printOnPremAccountDetails(contador,recordTracker)
 
 
-        if(noRecordsWarning(syncDue,option,log)):
+        if(noRecordsWarning(onPremYear,option,log)):
             log.write('\n-----------------------------------')
-            log.write('\n        Record Number: ' + str(recordTracker))
-            log.write('\nAccount Name: ' + accountName)
-            log.write('\nProduct Instances: ' + productInstance)
-            log.write('\nLast Sync Up from On-Prem: ' + lastSyncUp)
-            log.write('\nLast Sync Down to On-Prem: ' + lastSyncDown)
-            log.write('\nSynchronization Due: ' + syncDue)
-            log.write('\nVersion: ' + version)
-            log.write("\nWARNING ^^^^^  NO " + syncString(option).upper() + " ON RECORDS ^^^^^ WARNING")
+            
+            writeOnPremAccountDetails(contador,recordTracker)
 
+            log.write("\nWARNING ^^^^^  NO " + syncString(option).upper() + " ON RECORDS ^^^^^ WARNING")
             log.write('\n-----------------------------------')
             norecords += 1
 
         if(syncDueWarning(onPremYear,years,option,log)):
             log.write('\n-----------------------------------')
-            log.write('\n        Record Number: ' + str(recordTracker))
-            log.write('\nAccount Name: ' + accountName)
-            log.write('\nProduct Instances: ' + productInstance)
-            log.write('\nLast Sync Up from On-Prem: ' + lastSyncUp)
-            log.write('\nLast Sync Down to On-Prem: ' + lastSyncDown)
-            log.write('\nSynchronization Due: ' + syncDue)
-            log.write('\nVersion: ' + version)
+
+            writeOnPremAccountDetails(contador,recordTracker)
+
             log.write("\nWARNING ^^^^^ The " + syncString(option).upper() + " WAS DONE BEFORE " + str(years) + " ^^^^^ WARNING")
             log.write('\n-----------------------------------')
             warnings+=1
