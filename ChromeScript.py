@@ -1,4 +1,5 @@
 #Import Libreries
+from asyncio.windows_events import NULL
 from datetime import date
 from operator import truediv
 from pickle import FALSE, TRUE
@@ -14,7 +15,28 @@ import sys
 from selenium.webdriver.remote.remote_connection import LOGGER
 from datetime import datetime
 import chromedriver_binary
+#test
+#hello mega update
 #-----------------------------------------------------------
+
+#Define a Classes
+
+class OnPremAccounts:
+    number = NULL
+    name = ""
+    producInstances = ""
+    syncup = ""
+    syncdown = ""
+    syncdue = ""
+    version = ""
+    
+    def __init__(number,name,productinstances,syncup,syncdown,syncdue,version):
+        self.number = number
+
+
+
+
+
 
 #Definition of methods
 def findElementXPATH (xpath):
