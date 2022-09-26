@@ -22,21 +22,40 @@ import chromedriver_binary
 #Define a Classes
 
 class OnPremAccounts:
-    number = NULL
+    number = 0
     name = ""
     producInstances = ""
     syncup = ""
     syncdown = ""
     syncdue = ""
     version = ""
-    
-    def __init__(number,name,productinstances,syncup,syncdown,syncdue,version):
+
+    def __init__(self,number,name,productinstances,syncup,syncdown,syncdue,version):
         self.number = number
+        self.name = name
+        self.productInstances = productinstances
+        self.syncup = syncup
+        self.syncdown = syncdown
+        self.syncdue = syncdue
+        self.version = version
+    
+    def printDetails(self):
+        print('        Record Number: ' + str(self.number))
+        print('Account Name: ' + self.name)
+        print('Product Instances: ' + self.producInstances)
+        print('Last Sync Up from On-Prem: ' + self.syncup)
+        print('Last Sync Down to On-Prem: ' + self.syncdown)
+        print('Synchronization Due: ' + self.syncdue)
+        print('Version: ' + self.version)
 
-
-
-
-
+    def writeDetails(self,log):
+        log.write('\n        Record Number: ' + str(self.number))
+        log.write('\nAccount Name: ' + self.name)
+        log.write('\nProduct Instances: ' + self.producInstances)
+        log.write('\nLast Sync Up from On-Prem: ' + self.syncup)
+        log.write('\nLast Sync Down to On-Prem: ' + self.syncdown)
+        log.write('\nSynchronization Due: ' + self.syncdue)
+        log.write('\nVersion: ' + self.version)
 
 #Definition of methods
 def findElementXPATH (xpath):
@@ -145,24 +164,6 @@ def getOnPremOnRecords(xpath):
 
         if(string[element] == '('):
             enter = True
-
-def printOnPremAccountDetails(contador,recordTracker):
-    print('        Record Number: ' + str(recordTracker))
-    print('Account Name: ' + onPremAccountName(contador))
-    print('Product Instances: ' + onPremAccountProductInstance(contador))
-    print('Last Sync Up from On-Prem: ' + onPremAccountLastSyncUp(contador))
-    print('Last Sync Down to On-Prem: ' + onPremAccountLastSyncDown(contador))
-    print('Synchronization Due: ' + onPremAccountSyncDue(contador))
-    print('Version: ' + onPremAccountVersion(contador))
-
-def writeOnPremAccountDetails(contador,recordTracker):
-    log.write('\n        Record Number: ' + str(recordTracker))
-    log.write('\nAccount Name: ' + onPremAccountName(contador))
-    log.write('\nProduct Instances: ' + onPremAccountProductInstance(contador))
-    log.write('\nLast Sync Up from On-Prem: ' + onPremAccountLastSyncUp(contador))
-    log.write('\nLast Sync Down to On-Prem: ' + onPremAccountLastSyncDown(contador))
-    log.write('\nSynchronization Due: ' + onPremAccountSyncDue(contador))
-    log.write('\nVersion: ' + onPremAccountVersion(contador))
 
 
 
@@ -312,6 +313,7 @@ warnings = 0
 recordTracker = 1
 page = 0
 exitWhile = False
+accounts = []
 
 log.write('\t\t\t On-Prem Account Deleter Log - By Jafeth \n Date: ' + str(date.today()) + '\n Time: ' + str(datetime.now().strftime("%H:%M:%S")) + '\n')
 
@@ -322,6 +324,8 @@ while True:
 
     while contador <= 10:
 
+        accounts.append(OnPremAccounts(recordTracker,onPremAccountName(contador),onPremAccountProductInstance(contador),onPremAccountLastSyncUp(contador),onPremAccountLastSyncDown(contador),onPremAccountSyncDue(contador),onPremAccountVersion(contador)))
+
         if(option == 1):
             onPremYear = onPremAccountSyncDue(contador)
         elif(option == 2):
@@ -331,13 +335,13 @@ while True:
         
 
         print('-----------------------------------')
-        printOnPremAccountDetails(contador,recordTracker)
+        accounts[recordTracker - 1].printDetails()
 
 
         if(noRecordsWarning(onPremYear,option,log)):
             log.write('\n-----------------------------------')
             
-            writeOnPremAccountDetails(contador,recordTracker)
+            accounts[recordTracker - 1].writeDetails(log)
 
             log.write("\nWARNING ^^^^^  NO " + syncString(option).upper() + " ON RECORDS ^^^^^ WARNING")
             log.write('\n-----------------------------------')
@@ -346,7 +350,7 @@ while True:
         if(syncDueWarning(onPremYear,years,option,log)):
             log.write('\n-----------------------------------')
 
-            writeOnPremAccountDetails(contador,recordTracker)
+            accounts[recordTracker - 1].writeDetails(log)
 
             log.write("\nWARNING ^^^^^ The " + syncString(option).upper() + " WAS DONE BEFORE " + str(years) + " ^^^^^ WARNING")
             log.write('\n-----------------------------------')
