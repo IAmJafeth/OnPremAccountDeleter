@@ -15,9 +15,12 @@ import sys
 from selenium.webdriver.remote.remote_connection import LOGGER
 from datetime import datetime
 import chromedriver_binary
-#test
-#hello mega update
+from getpass import getpass
+import re
+
 #-----------------------------------------------------------
+
+regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 
 #Define a Classes
 
@@ -89,14 +92,14 @@ def compareYearsGT(year,dateText):
 def syncString(option):
     if(option == 1):
         return('Synchronization Due')
+    elif(option == 2):
+        return('Last Sync Up to On-Prem')
+    elif(option == 3):
+        return('Last Down Up to On-Prem')
+    elif(option == 0):
+        return('Not scanned yet')
     else:
-        if(option == 2):
-            return('Last Sync Up to On-Prem')
-        else:
-            if(option == 3):
-                return('Last Down Up to On-Prem')
-            else:
-                return('>ERROR<')
+        return('>ERROR<')
 
 def noRecordsWarning(syncdate,option,log):
 
@@ -119,6 +122,13 @@ def checkIsDigit(input_str):
         return True
     else:
         return False
+
+def checkEmail(email):
+    if(re.fullmatch(regex, email)):
+        return True
+
+    print(">>Invalid Email<<\n")
+    return False
 
 
 def onPremAccountName(contador):
@@ -175,12 +185,65 @@ print('\t █▄█ █ ▀█    █▀▀ █▀▄ ██▄ █ �
 print('\t\t\t\t\t\t\t\t\t\t\t 𝕓𝕪 𝕛𝕒𝕗𝕖𝕥𝕙\n\n')
 os.system('PAUSE')
 
+print('\n>>DO NOT CLOSE THE GOOGLE CHROME WINDOW<<\n')
+
+logoptions = webdriver.ChromeOptions()
+logoptions.add_argument('--log-level 3') 
+driver = webdriver.Chrome()
+
+records = 'Not synchronized'
+norecords= 'Not scanned yet'
+warnings = 'Not scanned yet'
+years = 'Not scanned yet'
+
+
 log = open('log.txt', 'w')
+accountsetup = False
+accounts = []
+
+print('                                                   Total of OnPrem Accounts on Records: ' + records )
+print('\n                       Main Menu        ')
+print('       ************************************              Last Scan Information')
+print('       *   1- Setup password and email    *         Flag: ' + syncString(1))
+print('       *   2- Scan OnPremAccounts         *         Year limit: ' + years)
+print('       *   3- Clean OnPremAccounts        *         Accounts flagged: ' + warnings)
+print('       *   Type EXIT to abort the program *         Accounts with no records: ' + norecords)
+print('       ************************************\n' )
+
+while(True):
+        menuoptionSTR = str(input('Select one option: '))
+
+        if(menuoptionSTR.upper() == 'EXIT' ):
+            print('> Program Aborted <')
+            sys.exit()
+
+        if(checkIsDigit(menuoptionSTR)):
+            menuoption = int(menuoptionSTR)
+            if(menuoption == 1 or menuoption == 2 or menuoption == 3):
+                break
+            else:
+                print('> INPUT ERROR: Select a valid number (1,2,3) <')
+        else:
+            print('> INPUT ERROR: Select a valid number (1,2,3) <')
+
+if(menuoption == 1):
+    print('\n\t\t Account Setup')
+
+    while(True):
+        accountEmail = str(input("Enter your email: "))
+        if(checkEmail(accountEmail)):
+            break
+    accountPassword = getpass()
+    print("Password Saved\n")
+    accountsetup = True
+
+elif(menuoption == 2):
+    if(not accountsetup):
+        print("\n>>Please Configure an Email and Password First<<\n")
+
 
 #Access the Web Page34
-options = webdriver.ChromeOptions()
-options.add_argument('--log-level 3') 
-driver = webdriver.Chrome()
+
 
 print("--------------")
 print("Process: Opening WebPage")
@@ -313,7 +376,7 @@ warnings = 0
 recordTracker = 1
 page = 0
 exitWhile = False
-accounts = []
+
 
 log.write('\t\t\t On-Prem Account Deleter Log - By Jafeth \n Date: ' + str(date.today()) + '\n Time: ' + str(datetime.now().strftime("%H:%M:%S")) + '\n')
 
