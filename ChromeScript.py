@@ -13,6 +13,7 @@ import time
 import sys
 from selenium.webdriver.remote.remote_connection import LOGGER
 from datetime import datetime
+import chromedriver_binary
 #-----------------------------------------------------------
 
 #Definition of methods
