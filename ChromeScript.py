@@ -444,7 +444,7 @@ while(True):
             if(not accountsscanned):
                 print("\n>>Please Complete a On-Prem Accounts Scan First<<")
             else:
-                print('  Select the Criteria to Flag the On-Prem Account\n')
+                print('\n\n  Select the Criteria to Flag the On-Prem Account\n')
                 print('  1- Synchronization Due     ')
                 print('  2- Last Sync Up to On-Prem ')
                 print('  3- Last Sync Down to On-Prem\n')
