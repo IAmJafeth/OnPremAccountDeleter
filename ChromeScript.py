@@ -17,14 +17,15 @@ from selenium.webdriver.remote.remote_connection import LOGGER
 from datetime import datetime
 import chromedriver_binary
 from getpass import getpass
-import re
+import re   
+import py_compile
+py_compile.compile('my_first_simple_program.py')
 
-#-----------------------------------------------------------
+#REGULAR EXPRESION ----------------------------------------------------------- REGULAR EXPRESION
 
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 
-#Define a Classes
-
+#Define Class ------------------------------------------------------------ Define a Class
 class OnPremAccounts:
     number = 0
     name = ""
@@ -61,7 +62,7 @@ class OnPremAccounts:
         log.write('\nSynchronization Due: ' + self.syncdue)
         log.write('\nVersion: ' + self.version)
 
-#Definition of methods
+#Define Funcitons ------------------------------------------------------------ Define Functions
 def progressBar(part, total, lenght=30):
     frac = part/total
     completed = int(frac * lenght)
@@ -186,8 +187,7 @@ def getOnPremOnRecords(xpath):
 
 
 
-#-----------------------------------------------------------
-#Tittle
+#Title ------------------------------------------------------------ Title#
 print('\n\n')
 print('\t █▀█ █▄ █ ▄▄ █▀█ █▀█ █▀▀ █▀▄▀█  ▄▀█ █▀▀ █▀▀ █▀█ █ █ █▄ █ ▀█▀ █▀  █▀▄ █▀▀ █   █▀▀ ▀█▀ █▀▀ █▀█')
 print('\t █▄█ █ ▀█    █▀▀ █▀▄ ██▄ █ ▀ █  █▀█ █▄▄ █▄▄ █▄█ █▄█ █ ▀█  █  ▄█  █▄▀ ██▄ █▄▄ ██▄  █  ██▄ █▀▄')
@@ -196,19 +196,20 @@ os.system('PAUSE')
 
 print('\n>>DO NOT CLOSE THE GOOGLE CHROME WINDOW<<\n')
 
+#Init Web Driver ------------------------------------------------------------ Init Web Driver#
 logoptions = webdriver.ChromeOptions()
 logoptions.add_argument('--log-level 3') 
 driver = webdriver.Chrome()
 
+#Init Variables ------------------------------------------------------------ Init Variables#
 records = 'Not synchronized'
 accountPassword = ''
 accountEmail = ''
 nextButton = ''
 option = 0
 
-
-
 log = open('log.txt', 'w')
+log.write('\t\t\t On-Prem Account Deleter Log - By Jafeth ')
 accountsetup = False
 accountsscanned = False
 passwordChanged = False
@@ -217,6 +218,7 @@ accounts = []
 
 time.sleep(4)
 
+#Main Menu ------------------------------------------------------------ Main Menu#
 while(True):
     while(True):
 
@@ -246,6 +248,7 @@ while(True):
                 else:
                     print('> INPUT ERROR: Select a valid number (1,2,3) <')
 
+#Option 1 ---------------------------------------------------------------------- Option 1#
 
         if(menuoption == 1):
             print('\n\t\t Account Setup')
@@ -259,6 +262,8 @@ while(True):
             print("\n> CREDENTIALS SAVED <\n")
             accountsetup = True
             passwordChanged = True
+
+#Option 2 ---------------------------------------------------------------------- Option 2#
 
         elif(menuoption == 2):
             if(not accountsetup):
@@ -440,6 +445,8 @@ while(True):
                         print('> RETURNING TO MAIN MENU <')
                         break
 
+#Option 3 ---------------------------------------------------------------------- Option 3#
+
         elif(menuoption == 3):
             if(not accountsscanned):
                 print("\n>>Please Complete a On-Prem Accounts Scan First<<")
@@ -500,8 +507,12 @@ while(True):
                 #Cycle through the OnPrem Accounts Grid Using two loops
                 #The outside loop cycle through the Pages and the Inside loop cycle through the rows
                 norecords= 0
-                warnings = 0
-                log.write('\t\t\t On-Prem Account Deleter Log - By Jafeth \n Date: ' + str(date.today()) + '\n Time: ' + str(datetime.now().strftime("%H:%M:%S")) + '\n')
+                warnings = 0    
+
+                log.write('\n ----------------------------------------------------------------------------------\n')
+                log.write('\n Date: ' + str(date.today()) + '\n Time: ' + str(datetime.now().strftime("%H:%M:%S")))
+                log.write('\nFlag Criteria: ' + syncString(option))
+                log.write('\nYear Limit: ' + str(years) + '\n')
 
                 for i in accounts:
 
