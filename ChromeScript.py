@@ -18,8 +18,6 @@ from datetime import datetime
 import chromedriver_binary
 from getpass import getpass
 import re   
-import py_compile
-py_compile.compile('my_first_simple_program.py')
 
 #REGULAR EXPRESION ----------------------------------------------------------- REGULAR EXPRESION
 
