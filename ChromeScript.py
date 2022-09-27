@@ -72,6 +72,9 @@ def progressBar(part, total, lenght=30):
 def findElementXPATH (xpath):
     return(driver.find_element(By.XPATH, xpath))
 
+def findElementID(ID):
+    return(driver.find_element(By.ID, ID ))
+
 def clickXPATH (xpath):
     x = findElementXPATH (xpath)
     x.click()
@@ -79,8 +82,16 @@ def clickXPATH (xpath):
 def waitForElementXpath (seconds,xpath):
     return(WebDriverWait(driver, seconds).until(EC.presence_of_element_located((By.XPATH, xpath))))
 
+def waitForElementID (seconds,ID):
+    return(WebDriverWait(driver, seconds).until(EC.presence_of_element_located((By.ID, ID))))
+
+
 def typeXPATH (text,xpath):
     x = findElementXPATH ( xpath)
+    x.send_keys(text)
+
+def typeID(text,ID):
+    x = findElementID(ID)
     x.send_keys(text)
 
 def extractYear(text):
@@ -184,7 +195,6 @@ def getOnPremOnRecords(xpath):
             enter = True
 
 
-
 #Title ------------------------------------------------------------ Title#
 print('\n\n')
 print('\t █▀█ █▄ █ ▄▄ █▀█ █▀█ █▀▀ █▀▄▀█  ▄▀█ █▀▀ █▀▀ █▀█ █ █ █▄ █ ▀█▀ █▀  █▀▄ █▀▀ █   █▀▀ ▀█▀ █▀▀ █▀█')
@@ -272,23 +282,25 @@ while(True):
                 sys.exit()
 
             else:
+
                 print("\n--------------")
                 print("Process: Opening WebPage")
                 try:
                     driver.get("https://software.cisco.com/software/smart-licensing/onprem-accounts")
                 except:
-                    print("\n>>> WEBPAGE TIMEOUT <<<")
+                    print("\n>>> WEBPAGE TIMEOUT 1<<<")
                     print('> RETURNING TO MAIN MENU <')
                     break
                 print("Process: COMPLETED")
                 print("--------------")
 
                 if(not alreadyLogin):
-
+                    
                     try:
-                        typeXPATH(accountEmail,'//*[@id="userInput"]')
+                        time.sleep(1)
+                        typeID(accountEmail,'userInput')
                     except:
-                        print("\n>>> WEBPAGE TIMEOUT <<<")
+                        print("\n>>> WEBPAGE TIMEOUT 2<<<")
                         print('> RETURNING TO MAIN MENU <')
                         break
                     
@@ -309,7 +321,7 @@ while(True):
                     try:
                         typeXPATH(accountPassword,'//*[@id="passwordInput"]')
                     except:
-                        print("\n>>> EMAIL ERROR: Check the Email Configuratione <<<")
+                        print("\n>>> EMAIL ERROR: Check the Email Configuration <<<")
                         print('> RETURNING TO MAIN MENU <')
                         break
                     
@@ -507,10 +519,10 @@ while(True):
                 norecords= 0
                 warnings = 0    
 
-                log.write('\n ----------------------------------------------------------------------------------\n')
+                log.write('\n -----------------------------------------------------------------------------------------------------\n')
                 log.write('\n Date: ' + str(date.today()) + '\n Time: ' + str(datetime.now().strftime("%H:%M:%S")))
-                log.write('\nFlag Criteria: ' + syncString(option))
-                log.write('\nYear Limit: ' + str(years) + '\n')
+                log.write('\n Flag Criteria: ' + syncString(option))
+                log.write('\n Year Limit: ' + str(years) + '\n')
 
                 for i in accounts:
 
