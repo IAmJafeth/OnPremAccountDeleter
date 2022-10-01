@@ -209,7 +209,8 @@ logoptions.add_argument('--log-level 3')
 driver = webdriver.Chrome()
 
 #Init Variables ------------------------------------------------------------ Init Variables#
-
+log = open('log.txt', 'w')
+log.write('\t\t\t On-Prem Account Deleter Log - By Jafeth ')
 
 records = 'Not synchronized'
 accountPassword = ''
